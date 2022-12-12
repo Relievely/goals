@@ -1,12 +1,11 @@
 import {Request} from "express";
 
-import {ActivityItem, ResponseObject} from "../../interfaces";
+import {ResponseObject} from "../../interfaces";
 
-import Database, {Database as DatabaseType, RunResult, Statement} from "better-sqlite3";
+import {RunResult, Statement} from "better-sqlite3";
 import {
     emptyResultResponse,
     emptyStatementResponse,
-    responseObjectItem,
     responseObjectItems,
     serviceDB
 } from "../../helpers";
@@ -16,7 +15,7 @@ export const createTablesAdapter = async (req: Request): Promise<ResponseObject<
         const endResult: RunResult[] = [];
 
         const createGoalsTable: Statement = serviceDB.prepare(`CREATE TABLE IF NOT EXISTS goals (
-                                                                         id UNIQUE INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                                         id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT,
                                                                          name TEXT,
                                                                          startTime DATE,
                                                                          endTime DATE,
@@ -24,10 +23,18 @@ export const createTablesAdapter = async (req: Request): Promise<ResponseObject<
                                                                          FOREIGN KEY (categoryId) REFERENCES categories(id)
                                                                 );`);
 
+        if (!createGoalsTable) {
+            reject(emptyStatementResponse);
+        }
+
         const createCategoriesTable: Statement = serviceDB.prepare(`CREATE TABLE IF NOT EXISTS categories (
-                                                                             id UNIQUE INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                                             id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT,
                                                                              name TEXT
                                                                 );`);
+
+        if (!createCategoriesTable) {
+            reject(emptyStatementResponse);
+        }
 
         serviceDB.transaction(() => {
             const goalsResult: RunResult = createGoalsTable.run();
