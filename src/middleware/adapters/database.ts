@@ -16,7 +16,7 @@ export const createTablesAdapter = async (req: Request): Promise<ResponseObject<
         const endResult: RunResult[] = [];
 
         const createGoalsTable: Statement = serviceDB.prepare(`CREATE TABLE IF NOT EXISTS goals (
-                                                                         id INTEGER PRIMARY KEY,
+                                                                         id UNIQUE INTEGER PRIMARY KEY AUTOINCREMENT,
                                                                          name TEXT,
                                                                          startTime DATE,
                                                                          endTime DATE,
@@ -25,7 +25,7 @@ export const createTablesAdapter = async (req: Request): Promise<ResponseObject<
                                                                 );`);
 
         const createCategoriesTable: Statement = serviceDB.prepare(`CREATE TABLE IF NOT EXISTS categories (
-                                                                             id INTEGER PRIMARY KEY,
+                                                                             id UNIQUE INTEGER PRIMARY KEY AUTOINCREMENT,
                                                                              name TEXT
                                                                 );`);
 
