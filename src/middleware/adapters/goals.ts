@@ -28,7 +28,7 @@ export const getAllGoalItemsAdapter = async (req: Request): Promise<ResponseObje
 }
 
 
-export const createGoalItemAdapter = async (req: Request): Promise<ResponseObject<RunResult>> => {
+export const insertGoalItemAdapter = async (req: Request): Promise<ResponseObject<RunResult>> => {
     return new Promise<ResponseObject<RunResult>>((resolve, reject) => {
 
         const item: GoalItem = req.body as GoalItem
