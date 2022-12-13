@@ -27,12 +27,25 @@ export const createTablesAdapter = async (req: Request): Promise<ResponseObject<
             reject(emptyStatementResponse);
         }
 
-        const createCategoriesTable: Statement = serviceDB.prepare(`CREATE TABLE IF NOT EXISTS categories (
+        const createCategoriesTable: Statement = serviceDB.prepare(`CREATE TABLE IF NOT EXISTS categories(
                                                                              id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT,
                                                                              name TEXT
                                                                 );`);
 
         if (!createCategoriesTable) {
+            reject(emptyStatementResponse);
+        }
+
+        const createRemindersTable: Statement = serviceDB.prepare(`CREATE TABLE IF NOT EXISTS reminders
+                                                                  (
+                                                                      id INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT,
+                                                                      name TEXT,
+                                                                      triggerTime INTEGER,
+                                                                      referenceID INTEGER,
+                                                                      FOREIGN KEY (referenceID) REFERENCES goals(id)
+            )`);
+
+        if (!createRemindersTable) {
             reject(emptyStatementResponse);
         }
 
@@ -49,10 +62,15 @@ export const createTablesAdapter = async (req: Request): Promise<ResponseObject<
             } else {
                 reject(emptyResultResponse);
             }
+            const remindersResult: RunResult = createRemindersTable.run();
+            if (remindersResult) {
+                endResult.push(remindersResult);
+            } else {
+                reject(emptyResultResponse);
+            }
         })();
 
         resolve(responseObjectItems<RunResult>(req, endResult));
-
     })
 }
 
