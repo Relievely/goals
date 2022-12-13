@@ -19,9 +19,17 @@ export interface ResponseObject<T> {
     error?: string
 }
 
-export interface ActivityItem {
+export interface GoalItem {
     id?: number,
     name: string,
-    description: string,
-    category: "Guided" | "Non-Guided"
+    startTime: number,
+    endTime: number,
+    categoryId: number
 }
+
+export interface GoalItemCategory {
+    id?: number,
+    name: string
+}
+
+
