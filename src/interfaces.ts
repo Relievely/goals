@@ -32,4 +32,9 @@ export interface GoalItemCategory {
     name: string
 }
 
-
+export interface GoalReminderItem {
+    id?: number,
+    name: string,
+    triggerTime: number,
+    referenceID: number
+}
