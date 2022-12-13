@@ -27,6 +27,35 @@ export const getAllGoalItemsAdapter = async (req: Request): Promise<ResponseObje
     });
 }
 
+
+export const insertGoalItemAdapter = async (req: Request): Promise<ResponseObject<RunResult>> => {
+    return new Promise<ResponseObject<RunResult>>((resolve, reject) => {
+
+        const item: GoalItem = req.body as GoalItem
+
+
+        const name: string = item.name;
+        let startTime: number = Date.now();
+        if (item.startTime) {
+            startTime = Number(item.startTime);
+        }
+        const categoryId: number = item.categoryId;
+
+        const stmt: Statement<[string, number, number]> = serviceDB.prepare(`INSERT INTO goals (name, startTime, categoryId) VALUES (?, ?, ?)`);
+
+        if (!stmt) {
+            reject(emptyStatementResponse);
+        }
+
+        const result: RunResult = stmt.run(name, startTime, categoryId);
+        if (result) {
+            resolve(responseObjectItem<RunResult>(req, result))
+        } else {
+            reject(emptyResultResponse);
+        }
+    });
+}
+
 export const insertReminderAdapter = async (req: Request): Promise<ResponseObject<RunResult>> => {
     return new Promise<ResponseObject<RunResult>>((resolve, reject) => {
         const item: GoalReminderItem = req.body as GoalReminderItem;

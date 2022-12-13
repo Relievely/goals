@@ -36,6 +36,19 @@ describe("Goal routes", () => {
             });
     })
 
+    it("should insert a new goal", async () => {
+        await requestWithSuperTest
+            .post("/goals/")
+            .send({name: "losing weight", startTime: 1, categoryId: 1})
+            .expect(200)
+            .expect('Content-Type', /json/)
+            .then((response: Response) => {
+                expect(response).toBeDefined();
+                const responseObject = response.body as ResponseObject<RunResult>
+                expect(responseObject.data.length).toBeGreaterThanOrEqual(1);
+            });
+    })
+
     it("should get all goal items", async () => {
         await requestWithSuperTest
             .get("/goals")
