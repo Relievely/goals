@@ -1,10 +1,17 @@
 import {Request, Response} from "express";
 import {GoalItem, ResponseObject} from "../../interfaces";
 import {responseError} from "../../helpers";
-import {getAllGoalItemsAdapter} from "../adapters/goals";
+import {createGoalItemAdapter, getAllGoalItemsAdapter} from "../adapters/goals";
+import {RunResult} from "better-sqlite3";
 
 export const getAllGoalItemsController = (req: Request, res: Response<ResponseObject<GoalItem[]>>): void => {
     getAllGoalItemsAdapter(req)
         .then((response: ResponseObject<GoalItem[]>) => res.status(200).json(response))
+        .catch((err: Error) => res.status(500).json(responseError(req, err.message)))
+}
+
+export const insertGoalItemController = (req: Request, res: Response<ResponseObject<RunResult>>): void => {
+    createGoalItemAdapter(req)
+        .then((response: ResponseObject<RunResult>) => res.status(200).json(response))
         .catch((err: Error) => res.status(500).json(responseError(req, err.message)))
 }
