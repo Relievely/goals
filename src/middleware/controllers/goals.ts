@@ -4,7 +4,7 @@ import {responseError} from "../../helpers";
 import {
     getAllGoalItemsAdapter,
     insertGoalItemAdapter,
-    updateReminderAdapter
+    updateReminderAdapter,
     insertReminderWithoutTriggerAdapter,
     insertReminderAdapter,
     updateGoalItemAdapter
