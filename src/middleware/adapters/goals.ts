@@ -76,6 +76,25 @@ export const insertReminderAdapter = async (req: Request): Promise<ResponseObjec
     });
 }
 
+
+export const insertReminderWithoutTriggerAdapter = async (req: Request): Promise<ResponseObject<RunResult>> => {
+    return new Promise<ResponseObject<RunResult>>((resolve, reject) => {
+        const item: GoalReminderItem = req.body as GoalReminderItem;
+
+        const stmt: Statement<[string, number]> = serviceDB.prepare(`INSERT INTO reminders (name, referenceID) VALUES (?, ?)`);
+        if (!stmt) {
+            reject(emptyStatementResponse);
+        }
+        const result: RunResult = stmt.run(item.name, item.referenceID);
+        
+        if (result) {
+            resolve(responseObjectItem<RunResult>(req, result))
+        } else {
+            reject(emptyResultResponse);
+        }
+    });
+}
+
 export const updateGoalItemAdapter = async (req: Request): Promise<ResponseObject<RunResult>> => {
     return new Promise<ResponseObject<RunResult>>((resolve, reject) => {
 
@@ -93,11 +112,14 @@ export const updateGoalItemAdapter = async (req: Request): Promise<ResponseObjec
 
         const stmt: Statement<[string, number, number, number, number]> = serviceDB.prepare(`UPDATE goals SET  name = ?, startTime = ?, endTime = ?, categoryId = ? WHERE id = ?`);
 
+
         if (!stmt) {
             reject(emptyStatementResponse);
         }
 
+
         const result: RunResult = stmt.run(name, startTime, endTime, categoryId, id);
+
         if (result) {
             resolve(responseObjectItem<RunResult>(req, result))
         } else {
