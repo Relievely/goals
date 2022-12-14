@@ -5,7 +5,8 @@ import {
     getAllGoalItemsAdapter,
     insertGoalItemAdapter,
     insertReminderWithoutTriggerAdapter,
-    insertReminderAdapter
+    insertReminderAdapter,
+    updateGoalItemAdapter
 } from "../adapters/goals";
 import {RunResult} from "better-sqlite3";
 
@@ -34,6 +35,12 @@ export const insertReminderWithoutTriggerController = (req: Request, res: Respon
 }
 export const insertGoalItemController = (req: Request, res: Response<ResponseObject<RunResult>>): void => {
     insertGoalItemAdapter(req)
+        .then((response: ResponseObject<RunResult>) => res.status(200).json(response))
+        .catch((err: Error) => res.status(500).json(responseError(req, err.message)))
+}
+
+export const updateGoalItemController = (req: Request, res: Response<ResponseObject<RunResult>>): void => {
+    updateGoalItemAdapter(req)
         .then((response: ResponseObject<RunResult>) => res.status(200).json(response))
         .catch((err: Error) => res.status(500).json(responseError(req, err.message)))
 }
