@@ -4,6 +4,7 @@ import {responseError} from "../../helpers";
 import {
     getAllGoalItemsAdapter,
     insertGoalItemAdapter,
+    updateReminderAdapter,
     insertReminderWithoutTriggerAdapter,
     insertReminderAdapter,
     updateGoalItemAdapter
@@ -39,8 +40,15 @@ export const insertGoalItemController = (req: Request, res: Response<ResponseObj
         .catch((err: Error) => res.status(500).json(responseError(req, err.message)))
 }
 
+export const updateReminderController = (req: Request, res: Response<ResponseObject<RunResult>>): void => {
+    updateReminderAdapter(req)
+        .then((response: ResponseObject<RunResult>) => res.status(200).json(response))
+        .catch((err: Error) => res.status(500).json(responseError(req, err.message)))
+}
+
 export const updateGoalItemController = (req: Request, res: Response<ResponseObject<RunResult>>): void => {
     updateGoalItemAdapter(req)
         .then((response: ResponseObject<RunResult>) => res.status(200).json(response))
         .catch((err: Error) => res.status(500).json(responseError(req, err.message)))
 }
+

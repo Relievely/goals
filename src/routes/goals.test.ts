@@ -1,5 +1,5 @@
 import {beforeAll, describe, expect, it} from "@jest/globals";
-import { databaseInit } from "./jestPresets";
+import {databaseInit} from "./jestPresets";
 import supertest, {Response} from "supertest";
 import {app} from "../app";
 import {GoalItem, ResponseObject} from "../interfaces";
@@ -23,10 +23,25 @@ describe("Goal routes", () => {
             });
     })
 
+
+    it("should update reminder", async () => {
+        await requestWithSuperTest
+            .patch("/goals/reminder")
+            .send({id: 1, triggerTime: 1670920680})
+            .expect(200)
+            .expect('Content-Type', /json/)
+            .then((response: Response) => {
+                expect(response).toBeDefined();
+                const responseObject = response.body as ResponseObject<RunResult>
+                expect(responseObject.data.length).toBeGreaterThanOrEqual(1);
+            });
+    })
+
     it("should insert a new reminder without trigger time", async () => {
         await requestWithSuperTest
             .post("/goals/reminder/without")
             .send({name: "Being on a diet", referenceID: 1})
+
             .expect(200)
             .expect('Content-Type', /json/)
             .then((response: Response) => {
