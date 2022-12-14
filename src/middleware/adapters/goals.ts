@@ -74,3 +74,22 @@ export const insertReminderAdapter = async (req: Request): Promise<ResponseObjec
         }
     });
 }
+
+export const updateReminderAdapter = async (req: Request): Promise<ResponseObject<RunResult>> => {
+    return new Promise<ResponseObject<RunResult>>((resolve, reject) => {
+        const item: GoalReminderItem = req.body as GoalReminderItem;
+
+        const stmt: Statement<[number, number]> = serviceDB.prepare(`UPDATE reminders SET triggerTime = ? WHERE id = ?`);
+
+        if (!stmt) {
+            reject(emptyStatementResponse);
+        }
+
+        const result: RunResult = stmt.run(Number(item.triggerTime), Number(item.id));
+        if (result) {
+            resolve(responseObjectItem<RunResult>(req, result))
+        } else {
+            reject(emptyResultResponse);
+        }
+    });
+}

@@ -1,9 +1,15 @@
 import {Router} from "express";
-import {getAllGoalItemsController, insertReminderController, insertGoalItemController} from "../middleware/controllers/goals";
+import {
+    getAllGoalItemsController,
+    insertReminderController,
+    insertGoalItemController,
+    updateReminderController
+} from "../middleware/controllers/goals";
 
 export const goals = Router();
 
 goals
     .get("/", getAllGoalItemsController)
+    .post("/", insertGoalItemController)
     .post("/reminder", insertReminderController)
-    .post("/",insertGoalItemController)
+    .patch("/reminder", updateReminderController)

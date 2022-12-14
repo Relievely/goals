@@ -4,7 +4,7 @@ import {responseError} from "../../helpers";
 import {
     getAllGoalItemsAdapter,
     insertGoalItemAdapter,
-    insertReminderAdapter
+    insertReminderAdapter, updateReminderAdapter
 } from "../adapters/goals";
 import {RunResult} from "better-sqlite3";
 
@@ -27,3 +27,10 @@ export const insertGoalItemController = (req: Request, res: Response<ResponseObj
         .then((response: ResponseObject<RunResult>) => res.status(200).json(response))
         .catch((err: Error) => res.status(500).json(responseError(req, err.message)))
 }
+
+export const updateReminderController = (req: Request, res: Response<ResponseObject<RunResult>>): void => {
+    updateReminderAdapter(req)
+        .then((response: ResponseObject<RunResult>) => res.status(200).json(response))
+        .catch((err: Error) => res.status(500).json(responseError(req, err.message)))
+}
+
