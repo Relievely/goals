@@ -1,6 +1,6 @@
 FROM node:lts-alpine
 
-LABEL org.opencontainers.image.source="https://github.com/relievely/activities"
+LABEL org.opencontainers.image.source="https://github.com/relievely/goals"
 
 ENV PORT=50016
 
